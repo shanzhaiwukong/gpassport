@@ -27,6 +27,7 @@ func New(cli *redis.Client, pre string) *Passport {
 
 // Add 添加
 func (p *Passport) Add(token, userID string, expire time.Duration) *Passport {
+	p.RemoveByUserID(userID)
 	p.lock.Lock()
 	defer p.lock.Unlock()
 	p.cli.Set(p.pre+token, userID, expire)
@@ -36,6 +37,7 @@ func (p *Passport) Add(token, userID string, expire time.Duration) *Passport {
 
 // AddWithEntity 添加并带上实体
 func (p *Passport) AddWithEntity(token, userID string, entity interface{}, expire time.Duration) *Passport {
+	p.RemoveByUserID(userID)
 	p.lock.Lock()
 	defer p.lock.Unlock()
 	p.cli.Set(p.pre+token, userID, expire)
